@@ -28,7 +28,7 @@
     }
 
     operation TestPhaseEstimation(oracle : (Int, Qubit[]) => Unit is Adj + Ctl, eigenstate : Qubit, expectedPhase : Double) : Unit {
-        let libPhase = BuiltinEstimation(eigenstate, oracle, 2);
+        let libPhase = BuiltinEstimation(eigenstate, oracle, 3);
         let manualPhase = ManualEstimation(eigenstate, oracle, 3);
         Message($"Expected: {expectedPhase}");
         Message($"Library: {libPhase}");

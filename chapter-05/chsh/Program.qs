@@ -77,8 +77,8 @@
     }
 
     operation MeasurementB(bit : Bool, q : Qubit) : Bool {
-        // if bit = 0, measure in computational basis rotated by -π/8
-        // if bit = 1, measure in computational basis rotated by π/8
+        // if bit = 0, measure in computational basis rotated by π/8 counter clockwise
+        // if bit = 1, measure in computational basis rotated by π/8 clockwise
         // this ensures win probability equal to cos²(π/8)
         let rotationAngle = bit ? (2.0 * PI() / 8.0) | (-2.0 * PI() / 8.0);
         Ry(rotationAngle, q);
