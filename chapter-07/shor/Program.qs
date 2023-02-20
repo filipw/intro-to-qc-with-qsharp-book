@@ -13,8 +13,6 @@
     @EntryPoint()
     operation Main() : Unit {
         // both the number to factor and the coprime are hardcoded for simplicity
-        // let numToFactor = 21;
-        // let coprime = 2;
         let N = 15; // number to factor
         let a = 13; // coprime
 
