@@ -13,47 +13,47 @@
     operation Main() : Unit {
         Message("Library CNOT");
         LibraryCNOT([false, false]); // |00> 
-        LibraryCNOT([false, false]); // |01> 
-        LibraryCNOT([false, false]); // |10> 
-        LibraryCNOT([false, false]); // |11>   
+        LibraryCNOT([false, true]); // |01> 
+        LibraryCNOT([true, false]); // |10> 
+        LibraryCNOT([true, true]); // |11>   
 
         Message("Manual CNOT");
         ManualCNOT([false, false]); // |00> 
-        ManualCNOT([false, false]); // |01> 
-        ManualCNOT([false, false]); // |10> 
-        ManualCNOT([false, false]); // |11>   
+        ManualCNOT([false, true]); // |01> 
+        ManualCNOT([true, false]); // |10> 
+        ManualCNOT([true, true]); // |11>   
 
         Message("Library SWAP");
         LibrarySWAP([false, false]); // |00> 
-        LibrarySWAP([false, false]); // |01> 
-        LibrarySWAP([false, false]); // |10> 
-        LibrarySWAP([false, false]); // |11>   
+        LibrarySWAP([false, true]); // |01> 
+        LibrarySWAP([true, false]); // |10> 
+        LibrarySWAP([true, true]); // |11>   
 
         Message("Manual SWAP");
         ManualSWAP([false, false]); // |00> 
-        ManualSWAP([false, false]); // |01> 
-        ManualSWAP([false, false]); // |10> 
-        ManualSWAP([false, false]); // |11> 
+        ManualSWAP([false, true]); // |01> 
+        ManualSWAP([true, false]); // |10> 
+        ManualSWAP([true, true]); // |11> 
 
         Message("Library CCNOT");
         LibraryCCNOT([false, false, false]); // |000> 
-        LibraryCCNOT([false, false, false]); // |001> 
-        LibraryCCNOT([false, false, false]); // |010> 
-        LibraryCCNOT([false, false, false]); // |011> 
-        LibraryCCNOT([false, false, false]); // |100> 
-        LibraryCCNOT([false, false, false]); // |101> 
-        LibraryCCNOT([false, false, false]); // |110> 
-        LibraryCCNOT([false, false, false]); // |111> 
+        LibraryCCNOT([false, false, true]); // |001> 
+        LibraryCCNOT([false, true, false]); // |010> 
+        LibraryCCNOT([false, true, true]); // |011> 
+        LibraryCCNOT([true, false, false]); // |100> 
+        LibraryCCNOT([true, false, true]); // |101> 
+        LibraryCCNOT([true, true, false]); // |110> 
+        LibraryCCNOT([true, true, true]); // |111> 
 
         Message("Manual CCNOT");
         ManualCCNOT([false, false, false]); // |000> 
-        ManualCCNOT([false, false, false]); // |001> 
-        ManualCCNOT([false, false, false]); // |010> 
-        ManualCCNOT([false, false, false]); // |011> 
-        ManualCCNOT([false, false, false]); // |100> 
-        ManualCCNOT([false, false, false]); // |101> 
-        ManualCCNOT([false, false, false]); // |110> 
-        ManualCCNOT([false, false, false]); // |111> 
+        ManualCCNOT([false, false, true]); // |001> 
+        ManualCCNOT([false, true, false]); // |010> 
+        ManualCCNOT([false, true, true]); // |011> 
+        ManualCCNOT([true, false, false]); // |100> 
+        ManualCCNOT([true, false, true]); // |101> 
+        ManualCCNOT([true, true, false]); // |110> 
+        ManualCCNOT([true, true, true]); // |111> 
     }
 
     operation LibraryCNOT(initState : Bool[]) : Unit {
