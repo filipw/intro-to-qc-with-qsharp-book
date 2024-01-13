@@ -1,6 +1,5 @@
 ﻿namespace Entanglement {
 
-    open Microsoft.Quantum.Preparation;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Measurement;
@@ -10,7 +9,7 @@
     operation Main() : Unit {
         TestBellState([false, false], [PauliZ, PauliZ]);
         TestBellState([false, true], [PauliZ, PauliZ]);
-        TestBellState([true, true], [PauliZ, PauliZ]);
+        TestBellState([true, false], [PauliZ, PauliZ]);
         TestBellState([true, true], [PauliZ, PauliZ]);
         TestBellState([false, false], [PauliZ, PauliX]);
     }
@@ -25,7 +24,6 @@
 
             H(control);
             CNOT(control, target);
-            // PrepareEntangledState([control], [target]);
             
             let c1 = ResultAsBool(Measure([bases[0]], [control]));
             let c2 = ResultAsBool(Measure([bases[1]], [target]));
@@ -34,6 +32,7 @@
             if (not c1 and c2) { set res w/= 1 <- res[1]+1; }
             if (c1 and not c2) { set res w/= 2 <- res[2]+1; }
             if (c1 and c2) { set res w/= 3 <- res[3]+1; }
+            ResetAll([control, target]);
         }
         
         let initialState = (init[0] ? "1" | "0") + (init[1] ? "1" | "0");

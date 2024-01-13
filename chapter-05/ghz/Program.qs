@@ -1,6 +1,5 @@
 ﻿namespace GHZ {
 
-    open Microsoft.Quantum.Logical;
     open Microsoft.Quantum.Intrinsic;
 
     @EntryPoint()
@@ -51,6 +50,7 @@
                 Measure([basis2], [qubits[1]]) == One,
                 Measure([basis3], [qubits[2]]) == One];
 
+        ResetAll(qubits);
         return result;
     }
 
@@ -61,5 +61,9 @@
     // a XOR b XOR c = x OR y OR z
     function CheckGameOutcome(xyz : Bool[], abc : Bool[]) : Bool {
         return Xor(abc[0], Xor(abc[1], abc[2])) == (xyz[0] or xyz[1] or xyz[2]);
+    }
+
+    function Xor(a : Bool, b : Bool) : Bool {
+        return (a or b) and ((not a) or (not b));
     }
 }

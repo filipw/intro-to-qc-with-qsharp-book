@@ -4,7 +4,6 @@
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Convert;
     open Microsoft.Quantum.Intrinsic;
-    open Microsoft.Quantum.Logical;
     open Microsoft.Quantum.Math;
     open Microsoft.Quantum.Measurement;
     open Microsoft.Quantum.Random;
@@ -22,10 +21,10 @@
             Teleport(message, resource, target);
             Adjoint PrepareState(target);
             set successCount += M(target) == Zero ? 1 | 0;
+            ResetAll([message, resource, target]);
         }
 
-        Message("Success rate: " 
-            + DoubleAsStringWithFormat(100. * IntAsDouble(successCount) / IntAsDouble(runs), "N2"));
+        Message($"Success rate: {100. * IntAsDouble(successCount) / IntAsDouble(runs)}");
     }
 
     operation Teleport(message : Qubit, resource : Qubit, target : Qubit) : Unit {

@@ -1,6 +1,5 @@
 ﻿namespace SwappingExample {
 
-    open Microsoft.Quantum.Preparation;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Measurement;
@@ -70,12 +69,19 @@
         } 
 
         // optional - this will return qubits to state |00⟩
-        //Adjoint PrepareEntangledState([q1], [q3]);
+        //Adjoint PrepareEntangledState(q1, q3);
 
         // at this point the entangled pair q1, q3 is |00⟩+|11⟩/√2
         let c1 = ResultAsBool(M(q1));
         let c3 = ResultAsBool(M(q3));
 
+        ResetAll([q1, q2, q3, q4]);
+
         return (c1, c3);
+    }
+
+    operation PrepareEntangledState(left : Qubit, right : Qubit) : Unit is Adj + Ctl {
+        H(left);
+        CNOT(left, right);
     }
 }

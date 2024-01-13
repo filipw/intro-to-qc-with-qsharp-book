@@ -1,7 +1,6 @@
 ﻿namespace SuperdenseCoding {
 
     open Microsoft.Quantum.Random;
-    open Microsoft.Quantum.Preparation;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Measurement;
@@ -12,13 +11,12 @@
         mutable successCount = 0;
         let runs = 4096;
         for run in 1..runs {
-            let (alice1, alice2) = (DrawRandomBool(0.5), DrawRandomBool(0.5));
+            let (alice1, alice2) = (DrawRandomInt(0, 1) == 1, DrawRandomInt(0, 1) == 1);
             let (bob1, bob2) = RunDenseCoding(alice1, alice2);
             set successCount += alice1 == bob1 and alice2 == bob2 ? 1 | 0;
         }
 
-        Message("Success rate: " 
-            + DoubleAsStringWithFormat(100. * IntAsDouble(successCount) / IntAsDouble(runs), "N2"));
+        Message($"Success rate: {100. * IntAsDouble(successCount) / IntAsDouble(runs)}");
     }
 
     operation RunDenseCoding(value1 : Bool, value2 : Bool) : (Bool, Bool) {
@@ -52,8 +50,9 @@
         CNOT(qubit1, qubit2);
         H(qubit1);
 
-        let result1 = IsResultOne(M(qubit1));
-        let result2 = IsResultOne(M(qubit2));
+        let result1 = M(qubit1) == One;
+        let result2 = M(qubit2) == One;
+        ResetAll([qubit1, qubit2]);
         return (result1, result2);
     }
 }
