@@ -45,6 +45,7 @@
         // an alternative basis specific measurements with a built-in reset:
         // MResetZ(qubit) 
         // MResetX(qubit)
+        Reset(qubit);
         return result;
     }
 
@@ -52,6 +53,7 @@
         use qubit = Qubit();
         H(qubit);
         let result = Measure([basis], [qubit]);
+        Reset(qubit);
         return result;
     }
 

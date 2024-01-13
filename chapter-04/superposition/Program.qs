@@ -1,6 +1,5 @@
 ﻿namespace QubitExample {
 
-    open Microsoft.Quantum.Arithmetic;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Measurement;
@@ -25,6 +24,7 @@
             use qubit = Qubit();
             H(qubit);
             let result = M(qubit);
+            Reset(qubit);
             set randomBits w/= idx <- result == One;
         }
         
@@ -35,7 +35,8 @@
         use qubits = Qubit[bitCount];
         ApplyToEach(H, qubits);
         
-        let result = MultiM(qubits);
+        let result = MeasureEachZ(qubits);
+        ResetAll(qubits);
         return BoolArrayAsInt(ResultArrayAsBoolArray(result));
     }   
 
@@ -43,8 +44,8 @@
         use qubits = Qubit[bitCount];
         ApplyToEach(H, qubits);
 
-        let register = LittleEndian(qubits);
-        let randomNumber = MeasureInteger(register);
+        let randomNumber = MeasureInteger(qubits);
+        ResetAll(qubits);
         return randomNumber;
     }  
 }

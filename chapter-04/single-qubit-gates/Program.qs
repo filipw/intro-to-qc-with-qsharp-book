@@ -2,7 +2,6 @@
 
     open Microsoft.Quantum.Math;
     open Microsoft.Quantum.Diagnostics;
-    open Microsoft.Quantum.Arithmetic;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Measurement;
@@ -10,35 +9,35 @@
 
     @EntryPoint()
     operation Main() : Unit {
-        // Message("Measuring I");
-        // Sample(4096, MeasureI);
+        Message("Measuring I");
+        Sample(4096, MeasureI);
 
-        // Message("Measuring X");
-        // Sample(4096, MeasureX);
+        Message("Measuring X");
+        Sample(4096, MeasureX);
         
-        // Message("Testing Z against |0>");
-        // TestZAgainst0();
+        Message("Testing Z against |0>");
+        TestZAgainst0();
         
-        // Message("Testing Z against |1>");
-        // TestZAgainst1();
+        Message("Testing Z against |1>");
+        TestZAgainst1();
         
-        // Message("Testing Y against |0>");
-        // TestYAgainst0();
+        Message("Testing Y against |0>");
+        TestYAgainst0();
         
         Message("Testing Y against |1>");
         TestYAgainst1();
         
-        // Message("Measuring HZH");
-        // Sample(4096, MeasureHZH);
+        Message("Measuring HZH");
+        Sample(4096, MeasureHZH);
         
-        // Message("Testing S against |1>");
-        // TestSAgainst1();
+        Message("Testing S against |1>");
+        TestSAgainst1();
         
-        // Message("Testing S reversibility");
-        // TestSReversibility();
+        Message("Testing S reversibility");
+        TestSReversibility();
         
-        // Message("Testing T - Z relationship");
-        // TestTZRelationship();
+        Message("Testing T - Z relationship");
+        TestTZRelationship();
     }
 
     operation Sample(iterations : Int, op: (Unit => Result)) : Unit {
@@ -57,6 +56,7 @@
         use qubit = Qubit();
         I(qubit);
         let result = M(qubit);
+        Reset(qubit);
         return result;
     }
 
@@ -64,6 +64,7 @@
         use qubit = Qubit();
         X(qubit);
         let result = M(qubit);
+        Reset(qubit);
         return result;
     }
 
@@ -73,6 +74,7 @@
         Z(qubit);
         H(qubit);
         let result = M(qubit);
+        Reset(qubit);
         return result;
     }
 
@@ -126,8 +128,11 @@
     operation TestTZRelationship() : Unit {
         use qubit = Qubit();
         X(qubit);
-        let t4 = OperationPow(T, 4);
-        t4(qubit);
+
+        T(qubit);
+        T(qubit);
+        T(qubit);
+        T(qubit);
         DumpMachine();
         Reset(qubit);
     }
