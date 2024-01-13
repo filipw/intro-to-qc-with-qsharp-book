@@ -2,10 +2,9 @@
 
     open Microsoft.Quantum.Diagnostics;
     open Microsoft.Quantum.Convert;
-    open Microsoft.Quantum.Arithmetic;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Arrays;
-    open Microsoft.Quantum.Logical;
+    open Microsoft.Quantum.Measurement;
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Math;
 
@@ -36,8 +35,8 @@
             Diffusion(qubits);
         }
 
-        let register = LittleEndian(qubits);
-        let number = MeasureInteger(register);
+        let number = MeasureInteger(qubits);
+        ResetAll(qubits);
         return number;
     }
 

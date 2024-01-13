@@ -4,10 +4,8 @@
     open Microsoft.Quantum.Convert;
     open Microsoft.Quantum.Diagnostics;
     open Microsoft.Quantum.Math;
-    open Microsoft.Quantum.Arithmetic;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Measurement;
-    open Microsoft.Quantum.Logical;
     open Microsoft.Quantum.Intrinsic;
 
     // v2
@@ -35,8 +33,8 @@
 
         ApplyToEach(H, x);
 
-        let result = MultiM(x);
-        Reset(y);
+        let result = MeasureEachZ(x);
+        ResetAll(x + [y]);
         return result;
     }
 
@@ -80,8 +78,8 @@
 
             ApplyToEach(H, x);
 
-            let result = MultiM(x);
-            Reset(y);
+            let result = MeasureEachZ(x);
+            ResetAll(x + [y]);
             let intResult = ResultArrayAsInt(result);
 
             Message($"Expected secret: {intSecret}, found secret: {intResult}");

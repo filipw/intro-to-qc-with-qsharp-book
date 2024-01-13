@@ -3,7 +3,6 @@
     open Microsoft.Quantum.Arrays;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Measurement;
-    open Microsoft.Quantum.Logical;
     open Microsoft.Quantum.Intrinsic;
 
     @EntryPoint()
@@ -35,8 +34,8 @@
 
         ApplyToEach(H, x);
 
-        let allZeroes = All(ResultIsZero, MultiM(x));
-        Reset(y);
+        let allZeroes = All(result -> result == Zero, MeasureEachZ(x));
+        ResetAll(x + [y]);
         return allZeroes;
     }
 
