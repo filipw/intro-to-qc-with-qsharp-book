@@ -10,7 +10,7 @@
     operation Main() : Unit {
         TestBellState([false, false], [PauliZ, PauliZ]);
         TestBellState([false, true], [PauliZ, PauliZ]);
-        TestBellState([true, true], [PauliZ, PauliZ]);
+        TestBellState([true, false], [PauliZ, PauliZ]);
         TestBellState([true, true], [PauliZ, PauliZ]);
         TestBellState([false, false], [PauliZ, PauliX]);
     }
