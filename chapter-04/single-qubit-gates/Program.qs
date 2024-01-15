@@ -55,7 +55,7 @@
     operation MeasureI() : Result {
         use qubit = Qubit();
         I(qubit);
-        let result = M(qubit);
+        let result = MResetZ(qubit);
         Reset(qubit);
         return result;
     }
@@ -63,8 +63,7 @@
     operation MeasureX() : Result {
         use qubit = Qubit();
         X(qubit);
-        let result = M(qubit);
-        Reset(qubit);
+        let result = MResetX(qubit);
         return result;
     }
 
@@ -73,8 +72,7 @@
         H(qubit);
         Z(qubit);
         H(qubit);
-        let result = M(qubit);
-        Reset(qubit);
+        let result = MResetZ(qubit);
         return result;
     }
 
