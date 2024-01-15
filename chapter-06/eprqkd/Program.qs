@@ -1,9 +1,7 @@
 ﻿namespace EPRQKD {
 
-    open Microsoft.Quantum.Logical;
     open Microsoft.Quantum.Arrays;
     open Microsoft.Quantum.Random;
-    open Microsoft.Quantum.Preparation;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Measurement;
@@ -30,7 +28,8 @@
 
             // 2. create an entangled EPR pair
             use (aliceQ, bobQ) = (Qubit(), Qubit());
-            PrepareEntangledState([aliceQ], [bobQ]);
+            H(aliceQ);
+            CNOT(aliceQ, bobQ);
 
             // 3. Eve attempts to evesdrop based on the configurable probability
             Eavesdrop(eavesdropperProbability, [bobQ]);
@@ -44,6 +43,8 @@
                 set bobResults += [DoMeasure(bobBases[i], bobQ)];
                 set aliceResults += [DoMeasure(aliceBases[i], aliceQ)];
             }
+
+            ResetAll([aliceQ, bobQ]);
         }
         
         // 5. Compare bases
@@ -103,15 +104,15 @@
     }
 
     function ProcessResults(errorRate : Double, aliceBits : Bool[], bobBits : Bool[], eavesdropperProbability : Double) : Unit {
-        Message($"Alice's key as int: {BoolArrayAsBigInt(aliceBits)} | key length: {IntAsString(Length(aliceBits))}");
-        Message($"Bob's key as int:   {BoolArrayAsBigInt(bobBits)} | key length: {IntAsString(Length(bobBits))}");
+        Message($"Alice's key as int: {BoolArrayAsBigInt(aliceBits)} | key length: {Length(aliceBits)}");
+        Message($"Bob's key as int:   {BoolArrayAsBigInt(bobBits)} | key length: {Length(bobBits)}");
 
         Message($"Error rate: {errorRate * IntAsDouble(100)}%");
         if (errorRate > 0.0) {
             Message($"Eavesdropper detected!");
         }
 
-        if (EqualA(EqualB, aliceBits, bobBits)) {
+        if aliceBits == bobBits {
             Message($"Running the protocol with eavesdropping probability {eavesdropperProbability} was successful.");
         } else {
             Message($"Running the protocol with eavesdropping probability {eavesdropperProbability} was unsuccessful.");
@@ -146,5 +147,20 @@
         }
 
         return bits;
+    }
+
+    operation DrawRandomBool(successProbability: Double) : Bool {
+        let randomValue = DrawRandomDouble(0.0, 1.0);
+        return randomValue < successProbability;
+    }
+
+    function BoolArrayAsBigInt(boolArray : Bool[]) : BigInt {
+        mutable result = 0L;
+        for i in 0..Length(boolArray) - 1 {
+            if (boolArray[i]) {
+                set result += 1L <<< i;
+            }
+        }
+        return result;
     }
 }
