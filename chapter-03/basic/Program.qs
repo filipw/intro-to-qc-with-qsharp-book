@@ -1,5 +1,6 @@
 ﻿namespace Basic {
 
+    open Microsoft.Quantum.Measurement;
     open Microsoft.Quantum.Convert;
     open Microsoft.Quantum.Random;
     open Microsoft.Quantum.Math;
@@ -14,7 +15,7 @@
 
     operation AllocateAndMeasure() : Result {
         use qubit = Qubit();
-        return M(qubit);
+        return MResetZ(qubit);
     }
 
     operation Typed() : Unit {
@@ -165,7 +166,7 @@
     }
 
     function TupleFunction(number : Int, flag : Bool) : (Double, String) {
-        let result = (IntAsDouble(number), BoolAsString(flag));
+        let result = (IntAsDouble(number), $"{flag}");
         return result;
     }
 
@@ -174,7 +175,7 @@
 
     function Convert() : Unit {
         let dblNumber = 1.;
-        let intNumber = DoubleAsInt(dblNumber);
+        let intNumber = Truncate(dblNumber);
     }
 
     function StringInterpolation() : Unit {
@@ -201,9 +202,10 @@
         // omitted for brevity
     }
 
-    @Attribute()
-    newtype MyAttribute = (Text : String);
+    // this cannot be ported - there are no more attributes
+    // @Attribute()
+    // newtype MyAttribute = (Text : String);
 
-    @MyAttribute("Foo")
-    operation MyOperation() : Unit {}
+    // @MyAttribute("Foo")
+    // operation MyOperation() : Unit {}
 }
