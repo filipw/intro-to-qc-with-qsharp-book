@@ -11,3 +11,37 @@ The book begins by covering historical aspects of quantum theory and quantum com
 Next, the core QC topics are discussed, complete with the necessary mathematical formalism. This includes the notions of qubit, quantum gates and quantum circuits. In addition to that, the book provides a detailed treatment of a series of important concepts from quantum information theory, in particular entanglement and the no-cloning theorem, followed by discussion about quantum key distribution and its various protocols. Finally, the canon of most important QC algorithms and algorithmic techniques is covered in-depth - from the Deutsch-Jozsa algorithm, through Grover’s search, to Quantum Fourier Transform, quantum phase estimation and Shor’s algorithm.  
 
 The book is an accessible introduction into the vibrant and fascinating field of quantum computing, offering a blend of academic diligence with pragmatism that is so central to software development world. All of the discussed theoretical aspects of QC are accompanied by runnable code examples, providing the reader with two different angles - mathematical and programmatic - of looking at the same problem space. 
+
+## Compatibility notes
+
+The [main](https://github.com/filipw/intro-to-qc-with-qsharp-book) branch in this repository contains the sample code that matches the content of the book *as it was published*. The code was written using the version [0.21.2112180703](https://learn.microsoft.com/en-us/azure/quantum/release-notes-2021#qdk-version-0212112180703) of the QDK and the Q# language, which was released on 14th December 2021. The code should also work fine with all the newer versions of QDK lower than 1.0 (the last pre-1.0 release was [0.28.302812](https://learn.microsoft.com/en-us/azure/quantum/release-notes-2023#qdk-version-028302812) on 15 September 2023).
+
+[QDK 1.0](https://devblogs.microsoft.com/qsharp/announcing-v1-0-of-the-azure-quantum-development-kit/) was released on 12 January 2024 and contains numerous breaking changes and feature gaps in the libraries and in the language itself. The code samples ported to that release can be found on the [qdk-1.0](https://github.com/filipw/intro-to-qc-with-qsharp-book/tree/qdk-1.0) branch. 
+
+You can also use the table below to navigate the samples, and switch between the versions in the book (QDK 0.2x) and QDK 1.0.
+
+## List of examples
+
+|Name|Chapter|Description|QDK 0.2x|QDK 1.0|
+|---|:---:|---|---|---|
+|basic|3|Basic Q# language examples|[link](/chapter-03/basic)|[link](../../tree/qdk-1.0/chapter-03/basic)
+|basic-qubits|4|Basic qubit examples|[link](/chapter-04/basic-qubits)|[link](../../tree/qdk-1.0/chapter-04/basic-qubits)
+|superposition|4|Superposition examples|[link](/chapter-04/superposition)|[link](../../tree/qdk-1.0/chapter-04/superposition)
+|single qubit gates|4|Single qubit gates examples|[link](/chapter-04/single-qubit-gates)|[link](../../tree/qdk-1.0/chapter-04/single-qubit-gates)
+|multi qubit gates|4|Multi qubit gates examples|[link](/chapter-04/multi-qubit-gates)|[link](../../tree/qdk-1.0/chapter-04/multi-qubit-gates)
+|entanglement|5|Basic Bell states examples|[link](/chapter-05/entanglement)|[link](../../tree/qdk-1.0/chapter-05/entanglement)
+|bell|5|Bell's inequality examples|[link](/chapter-05/bell)|[link](../../tree/qdk-1.0/chapter-05/bell)
+|chsh|5|CHSH game example|[link](/chapter-05/chsh)|[link](../../tree/qdk-1.0/chapter-05/chsh)
+|ghz|5|GHZ game example|[link](/chapter-05/ghz)|[link](../../tree/qdk-1.0/chapter-05/ghz)
+|teleportation|5|Teleportation example|[link](/chapter-05/teleportation)|[link](../../tree/qdk-1.0/chapter-05/teleportation)
+|entanglement swapping|5|Entanglement swapping example|[link](/chapter-05/entanglement-swapping)|[link](../../tree/qdk-1.0/chapter-05/entanglement-swapping)
+|superdense|5|Superdense coding example|[link](/chapter-05/superdense)|[link](../../tree/qdk-1.0/chapter-05/superdense)
+|bb84|6|BB84 protocol example|[link](/chapter-06/bb84)|[link](../../tree/qdk-1.0/chapter-06/bb84)
+|b92|6|B92 protocol example|[link](/chapter-06/b92)|[link](../../tree/qdk-1.0/chapter-06/b92)
+|eprqkd|6|EPR QDK protocol example|[link](/chapter-06/eprqkd)|[link](../../tree/qdk-1.0/chapter-06/eprqkd)
+|deutsch-jozsa|7|Deutsch-Jozsa algorithm|[link](/chapter-07/deutsch-jozsa)|[link](../../tree/qdk-1.0/chapter-07/deutsch-jozsa)
+|bernstein-vazirani|7|Bernstein-Vazirani algorithm|[link](/chapter-07/bernstein-vazirani)|[link](../../tree/qdk-1.0/chapter-07/bernstein-vazirani)
+|grover|7|Grover algorithm|[link](/chapter-07/grover)|[link](../../tree/qdk-1.0/chapter-07/grover)
+|qft|7|Quantum Fourier Transform example|[link](/chapter-07/qft)|[link](../../tree/qdk-1.0/chapter-07/qft)
+|qpe|7|Quantum phase estimation example|[link](/chapter-07/qpe)|[link](../../tree/qdk-1.0/chapter-07/qpe)
+|shor|7|Shor's algorithm|[link](/chapter-07/shor)|n/a
