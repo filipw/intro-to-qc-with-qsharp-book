@@ -52,8 +52,6 @@ Below is the list of breaking changes that occur in QDK 1.0, compared to QDK 0.2
 
 The grouping into chapters helps identify when a given braking change can be **first** encountered in the book. However, once it has been mentioned, it is not repeated again.
 
----
-
 ## General
 
 ### Mandatory qubit release
@@ -107,8 +105,6 @@ Can become:
 let allZeroes = All(result -> result == Zero, MeasureEachZ(x));
 ```
 
----
-
 ## Chapter 3
 
 ### `@Attribute()` missing
@@ -123,8 +119,6 @@ i.e. `BoolAsString(flag)` -> `$“{flag}”`
 ### `DoubleAsInt` missing
 
 Can be replaced with `Truncate` function from the `Microsoft.Quantum.Math` namespace.
-
----
 
 ## Chapter 4
 
@@ -162,8 +156,6 @@ internal operation ApplyOperationRepeatedly<'T> (op : ('T => Unit), power : Int,
 ```
 
 or simply by calling the operation the required (N) amount of times.
-
----
 
 ## Chapter 5
 
@@ -203,8 +195,6 @@ function Xor(a : Bool, b : Bool) : Bool {
 
 This was just a shorthand for creating entanglement using H + CNOT - can be added manually wherever needed.
 
----
-
 ## Chapter 6
 
 ### `EqualA`, `EqualB` missing
@@ -239,8 +229,6 @@ Not needed, can be solved with just interpolation or concatenation to a string.
 
 For example simple string interpolation
 i.e. `IntAsString(number)` -> `$“{number}”`
-
----
 
 ## Chapter 7
 
