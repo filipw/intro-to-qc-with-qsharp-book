@@ -183,11 +183,13 @@ operation DrawRandomBool(successProbability: Double) : Bool {
 
 ### `Xor` missing
 
-Can be replaced with manual check
+This was already [re-introduced](https://github.com/microsoft/qsharp/pull/1100) and will come in the next release.
+
+For now it can be replaced with manual check
 
 ```qsharp
 function Xor(a : Bool, b : Bool) : Bool {
-    (a or b) and ((not a) or (not b))
+    a != b
 }
 ```
 
@@ -206,7 +208,7 @@ can become `if aliceBits == bobBits`
 
 ### `BoolArrayAsBigInt` missing
 
-This was already [re-introduced](https://github.com/microsoft/qsharp/pull/1047) and will come in the next released.
+This was already [re-introduced](https://github.com/microsoft/qsharp/pull/1047) and will come in the next release.
 
 For now can be polyfilled:
 
@@ -250,7 +252,7 @@ operation ApplyIfCA<'T> (bit : Bool, op : ('T => Unit is Ctl + Adj), target : 'T
 
 ### `DumpRegister` missing
 
-This is still an [open issue](https://github.com/microsoft/qsharp/issues/579). For now the best solution is to use `DumpMachine` as the alternative.
+This is still an open issue - [see this](https://github.com/microsoft/qsharp/issues/579) and [this](https://github.com/microsoft/qsharp/issues/1138). For now the best solution is to use `DumpMachine` as the alternative.
 
 ### `QuantumPhaseEstimation` missing
 
