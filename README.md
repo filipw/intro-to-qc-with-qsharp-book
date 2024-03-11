@@ -181,17 +181,9 @@ operation DrawRandomBool(successProbability: Double) : Bool {
 }
 ```
 
-### `Xor` missing
+### ~~`Xor` missing~~
 
-This was already [re-introduced](https://github.com/microsoft/qsharp/pull/1100) and will come in the next release.
-
-For now it can be replaced with manual check
-
-```qsharp
-function Xor(a : Bool, b : Bool) : Bool {
-    a != b
-}
-```
+This was already [re-introduced](https://github.com/microsoft/qsharp/pull/1100) and is availble in QDK 1.1+
 
 ### `PrepareEntangledState` is missing
 
@@ -206,24 +198,9 @@ This is not necessary as most types are now comparable to each other.
 For example: `if (EqualA(EqualB, aliceBits, bobBits))`
 can become `if aliceBits == bobBits`
 
-### `BoolArrayAsBigInt` missing
+~~### `BoolArrayAsBigInt` missing~~
 
-This was already [re-introduced](https://github.com/microsoft/qsharp/pull/1047) and will come in the next release.
-
-For now can be polyfilled:
-
-```qsharp
-function BoolArrayAsBigInt(boolArray : Bool[]) : BigInt {
-    mutable result = 0L;
-    for i in 0..Length(boolArray) - 1 {
-        if (boolArray[i]) {
-            set result += 1L <<< i;
-        }
-    }
-
-    result
-}
-```
+This was already [re-introduced](https://github.com/microsoft/qsharp/pull/1047) and is available in QDK 1.1+
 
 ### `IntAsString` missing
 
@@ -250,9 +227,9 @@ operation ApplyIfCA<'T> (bit : Bool, op : ('T => Unit is Ctl + Adj), target : 'T
 }
 ```
 
-### `DumpRegister` missing
+~~### `DumpRegister` missing~~
 
-This is still an open issue - [see this](https://github.com/microsoft/qsharp/issues/579) and [this](https://github.com/microsoft/qsharp/issues/1138). For now the best solution is to use `DumpMachine` as the alternative.
+This was already [re-introduced](https://github.com/microsoft/qsharp/pull/1173) and is availble in QDK 1.2+
 
 ### `QuantumPhaseEstimation` missing
 
