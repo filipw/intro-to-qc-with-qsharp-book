@@ -198,7 +198,7 @@ This is not necessary as most types are now comparable to each other.
 For example: `if (EqualA(EqualB, aliceBits, bobBits))`
 can become `if aliceBits == bobBits`
 
-~~### `BoolArrayAsBigInt` missing~~
+### ~~`BoolArrayAsBigInt` missing~~
 
 This was already [re-introduced](https://github.com/microsoft/qsharp/pull/1047) and is available in QDK 1.1+
 
@@ -227,7 +227,7 @@ operation ApplyIfCA<'T> (bit : Bool, op : ('T => Unit is Ctl + Adj), target : 'T
 }
 ```
 
-~~### `DumpRegister` missing~~
+### ~~`DumpRegister` missing~~
 
 This was already [re-introduced](https://github.com/microsoft/qsharp/pull/1173) and is availble in QDK 1.2+
 
