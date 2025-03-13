@@ -59,15 +59,33 @@ The grouping into chapters helps identify when a given braking change can be **f
 The explicit release of qubits is now mandatory (it used to happen implicitly).
 Use `Reset`, `ResetAll` or measurement with a built-in reset (for example `MResetZ` instead of `M`).
 
-### Missing namespaces
+### Namespaces
 
-The following namespaces no longer exist:
+Q# now has implicit namespaces (file is a de facto namespace) so the code no longer must be wrapped in a namespace explicitly. Reusable functions and operations must be explicitly exported if they are needed in another file.
 
-* Microsoft.Quantum.Logical
-* Microsoft.Quantum.Arithmetic
-* Microsoft.Quantum.Preparation
-* Microsoft.Quantum.Oracles
-* Microsoft.Quantum.Characterization
+Additionally, all `Microsoft.*` namespaces got renamed to `Std.*`. Namespaces are now imported using the `import` keyword, instead of `open`. Individual callabales can be explicitly imported, or the entire namespace can be imported using `import *` syntax.
+
+Finally, all the intrinsic operations are implicitly imported, so there is no need to import them explicitly.
+
+For example:
+
+```qsharp
+namespace Microsoft.Quantum.Samples {
+    open Microsoft.Quantum.Intrinsic;
+    open Microsoft.Quantum.Math;
+    open Microsoft.Quantum.Canon;
+    open Microsoft.Quantum.Diagnostics;
+    open Microsoft.Quantum.Arrays;
+}
+```
+
+Can be simplified to:
+
+```qsharp
+import Std.Arrays.*;
+import Std.Diagnostics.*;
+import Std.Math.*;
+```
 
 ### Explicit return is not necessary anymore
 
@@ -109,7 +127,7 @@ let allZeroes = All(result -> result == Zero, MeasureEachZ(x));
 
 ### `@Attribute()` missing
 
-This cannot be ported as attributes are no longer supported in Q#.
+This cannot be ported as user-defined attributes are no longer supported in Q#.
 
 ### `BoolAsString` missing
 
@@ -165,31 +183,7 @@ These can be replaced with simple checks: `result == Zero` or `result == One`.
 
 ### `DoubleAsStringWithFormat` missing
 
-Still open how to do formatting in QDK 1.0.
-
-### `DrawRandomBool` missing
-
-* for cases where we used `DrawRandomBool(0.5)` - it can be replaced with `DrawRandomInt(0, 1) == 1`
-* for cases where we used `DrawRandomBool(successProbability)` - it can be replaced with `DrawRandomDouble(0.0, 1.0) < successProbability`
-
-A polyfill looks like this:
-
-```qsharp
-operation DrawRandomBool(successProbability: Double) : Bool {
-    let randomValue = DrawRandomDouble(0.0, 1.0);
-    return randomValue < successProbability;
-}
-```
-
-### `Xor` missing
-
-Can be replaced with manual check
-
-```qsharp
-function Xor(a : Bool, b : Bool) : Bool {
-    (a or b) and ((not a) or (not b))
-}
-```
+Replaced with `DoubleAsStringWithPrecision(number, precision)`.
 
 ### `PrepareEntangledState` is missing
 
@@ -203,25 +197,6 @@ This is not necessary as most types are now comparable to each other.
 
 For example: `if (EqualA(EqualB, aliceBits, bobBits))`
 can become `if aliceBits == bobBits`
-
-### `BoolArrayAsBigInt` missing
-
-This was already [re-introduced](https://github.com/microsoft/qsharp/pull/1047) and will come in the next released.
-
-For now can be polyfilled:
-
-```qsharp
-function BoolArrayAsBigInt(boolArray : Bool[]) : BigInt {
-    mutable result = 0L;
-    for i in 0..Length(boolArray) - 1 {
-        if (boolArray[i]) {
-            set result += 1L <<< i;
-        }
-    }
-
-    result
-}
-```
 
 ### `IntAsString` missing
 
@@ -248,10 +223,6 @@ operation ApplyIfCA<'T> (bit : Bool, op : ('T => Unit is Ctl + Adj), target : 'T
 }
 ```
 
-### `DumpRegister` missing
-
-This is still an [open issue](https://github.com/microsoft/qsharp/issues/579). For now the best solution is to use `DumpMachine` as the alternative.
-
 ### `QuantumPhaseEstimation` missing
 
 Phase estimation has to be done manually. See the sample code in this repo.
@@ -267,7 +238,7 @@ operation QFTLE(qs : Qubit[]) : Unit is Adj + Ctl {
     ApproximateQFT(Length(qs), Reversed(qs));
 }
 
-// original QDK QFT implmentation for big-endian
+// original QDK QFT implementation for big-endian
 operation ApproximateQFT (a : Int, qs : Qubit[]) : Unit is Adj + Ctl {
      let nQubits = Length(qs);
      Fact(nQubits > 0, "`Length(qs)` must be least 1");
