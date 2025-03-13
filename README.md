@@ -16,39 +16,39 @@ The book is an accessible introduction into the vibrant and fascinating field of
 
 The [main](https://github.com/filipw/intro-to-qc-with-qsharp-book) branch in this repository contains the sample code that matches the content of the book *as it was published*. The code was written using the version [0.21.2112180703](https://learn.microsoft.com/en-us/azure/quantum/release-notes-2021#qdk-version-0212112180703) of the QDK and the Q# language, which was released on 14th December 2021. The code should also work fine with all the newer versions of QDK lower than 1.0 (the last pre-1.0 release was [0.28.302812](https://learn.microsoft.com/en-us/azure/quantum/release-notes-2023#qdk-version-028302812) on 15 September 2023).
 
-[QDK 1.0](https://devblogs.microsoft.com/qsharp/announcing-v1-0-of-the-azure-quantum-development-kit/) was released on 12 January 2024 and contains numerous breaking changes and feature gaps in the libraries and in the language itself. The code samples ported to that release can be found on the [qdk-1.0](https://github.com/filipw/intro-to-qc-with-qsharp-book/tree/qdk-1.0) branch. 
+[QDK 1.0](https://devblogs.microsoft.com/qsharp/announcing-v1-0-of-the-azure-quantum-development-kit/) was released on 12 January 2024 and contains numerous breaking changes and feature gaps in the libraries and in the language itself. The code samples ported to that release can be found on the [qdk-1.x](https://github.com/filipw/intro-to-qc-with-qsharp-book/tree/qdk-1.x) branch.
 
-You can also use the table below to navigate the samples, and switch between the versions in the book (QDK 0.2x) and QDK 1.0.
+You can also use the table below to navigate the samples, and switch between the versions in the book (QDK 0.2x) and QDK 1.x.
 
 ## List of examples
 
-|Name|Chapter|Description|QDK 0.2x|QDK 1.0|
+|Name|Chapter|Description|QDK 0.2x|QDK 1.x|
 |---|:---:|---|---|---|
-|basic|3|Basic Q# language examples|[link](../../tree/main/chapter-03/basic)|[link](../../tree/qdk-1.0/chapter-03/basic)
-|basic-qubits|4|Basic qubit examples|[link](../../tree/main/chapter-04/basic-qubits)|[link](../../tree/qdk-1.0/chapter-04/basic-qubits)
-|superposition|4|Superposition examples|[link](../../tree/main/chapter-04/superposition)|[link](../../tree/qdk-1.0/chapter-04/superposition)
-|single qubit gates|4|Single qubit gates examples|[link](../../tree/main/chapter-04/single-qubit-gates)|[link](../../tree/qdk-1.0/chapter-04/single-qubit-gates)
-|multi qubit gates|4|Multi qubit gates examples|[link](../../tree/main/chapter-04/multi-qubit-gates)|[link](../../tree/qdk-1.0/chapter-04/multi-qubit-gates)
-|entanglement|5|Basic Bell states examples|[link](../../tree/main/chapter-05/entanglement)|[link](../../tree/qdk-1.0/chapter-05/entanglement)
-|bell|5|Bell's inequality examples|[link](../../tree/main/chapter-05/bell)|[link](../../tree/qdk-1.0/chapter-05/bell)
-|chsh|5|CHSH game example|[link](../../tree/main/chapter-05/chsh)|[link](../../tree/qdk-1.0/chapter-05/chsh)
-|ghz|5|GHZ game example|[link](../../tree/main/chapter-05/ghz)|[link](../../tree/qdk-1.0/chapter-05/ghz)
-|teleportation|5|Teleportation example|[link](../../tree/main/chapter-05/teleportation)|[link](../../tree/qdk-1.0/chapter-05/teleportation)
-|entanglement swapping|5|Entanglement swapping example|[link](../../tree/main/chapter-05/entanglement-swapping)|[link](../../tree/qdk-1.0/chapter-05/entanglement-swapping)
-|superdense|5|Superdense coding example|[link](../../tree/main/chapter-05/superdense)|[link](../../tree/qdk-1.0/chapter-05/superdense)
-|bb84|6|BB84 protocol example|[link](../../tree/main/chapter-06/bb84)|[link](../../tree/qdk-1.0/chapter-06/bb84)
-|b92|6|B92 protocol example|[link](../../tree/main/chapter-06/b92)|[link](../../tree/qdk-1.0/chapter-06/b92)
-|eprqkd|6|EPR QDK protocol example|[link](../../tree/main/chapter-06/eprqkd)|[link](../../tree/qdk-1.0/chapter-06/eprqkd)
-|deutsch-jozsa|7|Deutsch-Jozsa algorithm|[link](../../tree/main/chapter-07/deutsch-jozsa)|[link](../../tree/qdk-1.0/chapter-07/deutsch-jozsa)
-|bernstein-vazirani|7|Bernstein-Vazirani algorithm|[link](../../tree/main/chapter-07/bernstein-vazirani)|[link](../../tree/qdk-1.0/chapter-07/bernstein-vazirani)
-|grover|7|Grover algorithm|[link](../../tree/main/chapter-07/grover)|[link](../../tree/qdk-1.0/chapter-07/grover)
+|basic|3|Basic Q# language examples|[link](../../tree/main/chapter-03/basic)|[link](../../tree/qdk-1.x/chapter-03/basic)
+|basic-qubits|4|Basic qubit examples|[link](../../tree/main/chapter-04/basic-qubits)|[link](../../tree/qdk-1.x/chapter-04/basic-qubits)
+|superposition|4|Superposition examples|[link](../../tree/main/chapter-04/superposition)|[link](../../tree/qdk-1.x/chapter-04/superposition)
+|single qubit gates|4|Single qubit gates examples|[link](../../tree/main/chapter-04/single-qubit-gates)|[link](../../tree/qdk-1.x/chapter-04/single-qubit-gates)
+|multi qubit gates|4|Multi qubit gates examples|[link](../../tree/main/chapter-04/multi-qubit-gates)|[link](../../tree/qdk-1.x/chapter-04/multi-qubit-gates)
+|entanglement|5|Basic Bell states examples|[link](../../tree/main/chapter-05/entanglement)|[link](../../tree/qdk-1.x/chapter-05/entanglement)
+|bell|5|Bell's inequality examples|[link](../../tree/main/chapter-05/bell)|[link](../../tree/qdk-1.x/chapter-05/bell)
+|chsh|5|CHSH game example|[link](../../tree/main/chapter-05/chsh)|[link](../../tree/qdk-1.x/chapter-05/chsh)
+|ghz|5|GHZ game example|[link](../../tree/main/chapter-05/ghz)|[link](../../tree/qdk-1.x/chapter-05/ghz)
+|teleportation|5|Teleportation example|[link](../../tree/main/chapter-05/teleportation)|[link](../../tree/qdk-1.x/chapter-05/teleportation)
+|entanglement swapping|5|Entanglement swapping example|[link](../../tree/main/chapter-05/entanglement-swapping)|[link](../../tree/qdk-1.x/chapter-05/entanglement-swapping)
+|superdense|5|Superdense coding example|[link](../../tree/main/chapter-05/superdense)|[link](../../tree/qdk-1.x/chapter-05/superdense)
+|bb84|6|BB84 protocol example|[link](../../tree/main/chapter-06/bb84)|[link](../../tree/qdk-1.x/chapter-06/bb84)
+|b92|6|B92 protocol example|[link](../../tree/main/chapter-06/b92)|[link](../../tree/qdk-1.x/chapter-06/b92)
+|eprqkd|6|EPR QDK protocol example|[link](../../tree/main/chapter-06/eprqkd)|[link](../../tree/qdk-1.x/chapter-06/eprqkd)
+|deutsch-jozsa|7|Deutsch-Jozsa algorithm|[link](../../tree/main/chapter-07/deutsch-jozsa)|[link](../../tree/qdk-1.x/chapter-07/deutsch-jozsa)
+|bernstein-vazirani|7|Bernstein-Vazirani algorithm|[link](../../tree/main/chapter-07/bernstein-vazirani)|[link](../../tree/qdk-1.x/chapter-07/bernstein-vazirani)
+|grover|7|Grover algorithm|[link](../../tree/main/chapter-07/grover)|[link](../../tree/qdk-1.x/chapter-07/grover)
 |qft|7|Quantum Fourier Transform example|[link](../../tree/main/chapter-07/qft)|n/a
-|qpe|7|Quantum phase estimation example|[link](../../tree/main/chapter-07/qpe)|[link](../../tree/qdk-1.0/chapter-07/qpe)
+|qpe|7|Quantum phase estimation example|[link](../../tree/main/chapter-07/qpe)|[link](../../tree/qdk-1.x/chapter-07/qpe)
 |shor|7|Shor's algorithm|[link](../../tree/main/chapter-07/shor)|n/a
 
-# QDK 1.0 migration notes
+# QDK 1.x migration notes
 
-Below is the list of breaking changes that occur in QDK 1.0, compared to QDK 0.2x. Note that this is not a comprehensive list, but one that focuses on the content and the code used in this book. It effectively summarizes that changes that have been applied between the `main` and `qdk-1.0` branches.
+Below is the list of breaking changes that occur in QDK 1.x, compared to QDK 0.2x. Note that this is not a comprehensive list, but one that focuses on the content and the code used in this book. It effectively summarizes that changes that have been applied between the `main` and `qdk-1.x` branches.
 
 The grouping into chapters helps identify when a given braking change can be **first** encountered in the book. However, once it has been mentioned, it is not repeated again.
 
@@ -59,15 +59,33 @@ The grouping into chapters helps identify when a given braking change can be **f
 The explicit release of qubits is now mandatory (it used to happen implicitly).
 Use `Reset`, `ResetAll` or measurement with a built-in reset (for example `MResetZ` instead of `M`).
 
-### Missing namespaces
+### Namespaces
 
-The following namespaces no longer exist:
+Q# now has implicit namespaces (file is a de facto namespace) so the code no longer must be wrapped in a namespace explicitly. Reusable functions and operations must be explicitly exported if they are needed in another file.
 
-* Microsoft.Quantum.Logical
-* Microsoft.Quantum.Arithmetic
-* Microsoft.Quantum.Preparation
-* Microsoft.Quantum.Oracles
-* Microsoft.Quantum.Characterization
+Additionally, all `Microsoft.*` namespaces got renamed to `Std.*`. Namespaces are now imported using the `import` keyword, instead of `open`. Individual callabales can be explicitly imported, or the entire namespace can be imported using `import *` syntax.
+
+Finally, all the intrinsic operations are implicitly imported, so there is no need to import them explicitly.
+
+For example:
+
+```qsharp
+namespace Microsoft.Quantum.Samples {
+    open Microsoft.Quantum.Intrinsic;
+    open Microsoft.Quantum.Math;
+    open Microsoft.Quantum.Canon;
+    open Microsoft.Quantum.Diagnostics;
+    open Microsoft.Quantum.Arrays;
+}
+```
+
+Can be simplified to:
+
+```qsharp
+import Std.Arrays.*;
+import Std.Diagnostics.*;
+import Std.Math.*;
+```
 
 ### Explicit return is not necessary anymore
 
@@ -109,7 +127,7 @@ let allZeroes = All(result -> result == Zero, MeasureEachZ(x));
 
 ### `@Attribute()` missing
 
-This cannot be ported as attributes are no longer supported in Q#.
+This cannot be ported as user-defined attributes are no longer supported in Q#.
 
 ### `BoolAsString` missing
 
@@ -165,25 +183,7 @@ These can be replaced with simple checks: `result == Zero` or `result == One`.
 
 ### `DoubleAsStringWithFormat` missing
 
-Still open how to do formatting in QDK 1.0.
-
-### `DrawRandomBool` missing
-
-* for cases where we used `DrawRandomBool(0.5)` - it can be replaced with `DrawRandomInt(0, 1) == 1`
-* for cases where we used `DrawRandomBool(successProbability)` - it can be replaced with `DrawRandomDouble(0.0, 1.0) < successProbability`
-
-A polyfill looks like this:
-
-```qsharp
-operation DrawRandomBool(successProbability: Double) : Bool {
-    let randomValue = DrawRandomDouble(0.0, 1.0);
-    return randomValue < successProbability;
-}
-```
-
-### ~~`Xor` missing~~
-
-This was already [re-introduced](https://github.com/microsoft/qsharp/pull/1100) and is availble in QDK 1.1+
+Replaced with `DoubleAsStringWithPrecision(number, precision)`.
 
 ### `PrepareEntangledState` is missing
 
@@ -197,10 +197,6 @@ This is not necessary as most types are now comparable to each other.
 
 For example: `if (EqualA(EqualB, aliceBits, bobBits))`
 can become `if aliceBits == bobBits`
-
-### ~~`BoolArrayAsBigInt` missing~~
-
-This was already [re-introduced](https://github.com/microsoft/qsharp/pull/1047) and is available in QDK 1.1+
 
 ### `IntAsString` missing
 
@@ -227,10 +223,6 @@ operation ApplyIfCA<'T> (bit : Bool, op : ('T => Unit is Ctl + Adj), target : 'T
 }
 ```
 
-### ~~`DumpRegister` missing~~
-
-This was already [re-introduced](https://github.com/microsoft/qsharp/pull/1173) and is availble in QDK 1.2+
-
 ### `QuantumPhaseEstimation` missing
 
 Phase estimation has to be done manually. See the sample code in this repo.
@@ -246,7 +238,7 @@ operation QFTLE(qs : Qubit[]) : Unit is Adj + Ctl {
     ApproximateQFT(Length(qs), Reversed(qs));
 }
 
-// original QDK QFT implmentation for big-endian
+// original QDK QFT implementation for big-endian
 operation ApproximateQFT (a : Int, qs : Qubit[]) : Unit is Adj + Ctl {
      let nQubits = Length(qs);
      Fact(nQubits > 0, "`Length(qs)` must be least 1");
