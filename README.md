@@ -123,6 +123,22 @@ Can become:
 let allZeroes = All(result -> result == Zero, MeasureEachZ(x));
 ```
 
+### Tuple decomposition now supported
+
+Q# 1.x supports direct tuple decomposition, eliminating the need for accessing tuple elements with the `::Item1`, `::Item2`, etc. syntax.
+
+```qsharp
+let tuple = SomeFunction();
+let firstItem = tuple::Item1;
+let secondItem = tuple::Item2;
+```
+
+Can be simplified to:
+
+```qsharp
+let (firstItem, secondItem) = SomeFunction();
+```
+
 ## Chapter 3
 
 ### `@Attribute()` missing
@@ -254,3 +270,32 @@ operation ApproximateQFT (a : Int, qs : Qubit[]) : Unit is Adj + Ctl {
      SwapReverseRegister(qs);
 }
 ```
+
+### `Fraction` type missing
+
+The `Fraction` type has been removed in QDK 1.x. Calculations with fractions can now be handled using tuples directly. For example:
+
+```qsharp
+let input = Fraction(numerator, denominator);
+let result = ContinuedFractionConvergentI(input, modulus);
+let period = AbsI(result::Denominator);
+```
+
+Can be replaced with:
+
+```qsharp
+// New code
+let (_, period) = ContinuedFractionConvergentI((numerator, denominator), modulus);
+let periodAbs = AbsI(period);
+```
+
+### `DiscreteOracle` type missing
+
+The `DiscreteOracle` type is no longer available in QDK 1.x. Instead, functions and operations that previously used it should be refactored to accept and use controlled operations directly.
+
+```qsharp
+let oracle = DiscreteOracle(PrepareOracle(a, N, _, _));
+QuantumPhaseEstimation(oracle, target, BigEndian(source));
+```
+
+Can be replaced with a direct implementation of phase estimation that takes the appropriate operations as parameters.
