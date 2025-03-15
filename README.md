@@ -163,9 +163,9 @@ However, internally it was really just a loop of measurements.
 
 Can be replaced with `MeasureEachZ` or a manual measurement loop.
 
-### `LittleEndian` type missing
+### `LittleEndian` and `BigEndian` types missing
 
-Wherever needed, we can now just pass qubit array in little-endian format instead.
+Wherever needed, we can now just pass qubit array in little-endian or big-endian format instead - ideally with the ordering explained in comments when necessary.
 
 ### MeasureInteger
 
