@@ -44,7 +44,7 @@ You can also use the table below to navigate the samples, and switch between the
 |grover|7|Grover algorithm|[link](../../tree/main/chapter-07/grover)|[link](../../tree/qdk-1.x/chapter-07/grover)
 |qft|7|Quantum Fourier Transform example|[link](../../tree/main/chapter-07/qft)|n/a
 |qpe|7|Quantum phase estimation example|[link](../../tree/main/chapter-07/qpe)|[link](../../tree/qdk-1.x/chapter-07/qpe)
-|shor|7|Shor's algorithm|[link](../../tree/main/chapter-07/shor)|n/a
+|shor|7|Shor's algorithm|[link](../../tree/main/chapter-07/shor)|[link](../../tree/qdk-1.x/chapter-07/shor)
 
 # QDK 1.x migration notes
 
