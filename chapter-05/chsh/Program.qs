@@ -59,7 +59,8 @@ operation QuantumStrategy(inputA : Bool, inputB : Bool) : (Bool, Bool) {
 
 operation MeasurementA(bit : Bool, q : Qubit) : Bool {
     let result = Measure([bit ? PauliX | PauliZ], [q]);
-    return MResetZ(q) == One;
+    Reset(q);
+    return result == One;
 
     // different way of expressing the same
     // X basis is the computational basis rotated by -π/4
