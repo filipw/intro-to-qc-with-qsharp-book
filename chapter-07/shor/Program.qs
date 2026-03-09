@@ -1,9 +1,10 @@
-﻿import Std.Math.*;
+import Std.Math.*;
 import Std.Arrays.*;
 import Std.Convert.*;
 import Std.Diagnostics.*;
 import Std.Random.*;
 import Std.Arithmetic.*;
+import Std.Canon.*; 
 
 @EntryPoint()
 operation Main() : Unit {
@@ -49,8 +50,7 @@ function CalculateFactors(a : Int, N : Int, r : Int) : Int[] {
     ]; // q
 
     // filter out trivial factors
-    let filter = IsNonTrivialFactor(N, _);
-    return Filtered(filter, candidates);
+    return Filtered(IsNonTrivialFactor(N, _), candidates);
 }
 
 function IsNonTrivialFactor(N : Int, i : Int) : Bool {
@@ -71,49 +71,30 @@ operation EstimatePhase(a : Int, N : Int) : Int {
 
     // initialize target register to store eigenstate |1⟩
     use targetRegister = Qubit[numToFactorBitSize];
+    
+    // allocate qubits for the phase register
+    use phaseRegister = Qubit[precisionBits];
 
     // initialize the target register to |1⟩
     X(targetRegister[numToFactorBitSize - 1]);
 
+    // partially apply the oracle so its signature matches (Int, Qubit[]) => Unit is Adj + Ctl
+    let oracle = ApplyOrderFindingOracle(a, N, _, _);
+    
     // apply QPE using the oracle
-    let phaseResult = QuantumPhaseEstimation(a, N, precisionBits, targetRegister);
+    // use the Canon ApplyQPE directly instead of a custom loop
+    ApplyQPE(oracle, targetRegister, phaseRegister);
+
+    // measure the phase register
+    let phaseResult = MeasureInteger(phaseRegister);
 
     // reset the target register
+    // clean up both registers
     ResetAll(targetRegister);
+    ResetAll(phaseRegister);
 
     Message($"Phase: {IntAsDouble(phaseResult) / IntAsDouble(2^precisionBits)}");
     return phaseResult;
-}
-
-operation QuantumPhaseEstimation(
-    generator : Int,
-    modulus : Int,
-    precisionBits : Int,
-    targetRegister : Qubit[]
-) : Int {
-    // allocate qubits for the phase register
-    use phaseRegister = Qubit[precisionBits];
-
-    // apply Hadamard gates to all control qubits
-    ApplyToEach(H, phaseRegister);
-
-    // apply controlled powers of the oracle
-    for idxControlQubit in 0..precisionBits - 1 {
-        let power = 1 <<< (precisionBits - 1 - idxControlQubit); // 2^(precisionBits-1-idx)
-        Controlled ApplyOrderFindingOracle(
-            [phaseRegister[idxControlQubit]],
-            (generator, modulus, power, targetRegister)
-        );
-    }
-
-    // apply inverse QFT to the phase register
-    // note: in Q# 1.x, ApplyQFT expects qubits in little-endian order
-    Adjoint ApplyQFT(phaseRegister);
-
-    // measure the phase register
-    let result = MeasureInteger(phaseRegister);
-
-    return result;
 }
 
 operation ApplyOrderFindingOracle(
