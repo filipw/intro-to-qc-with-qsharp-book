@@ -241,7 +241,7 @@ operation ApplyIfCA<'T> (bit : Bool, op : ('T => Unit is Ctl + Adj), target : 'T
 
 ### `QuantumPhaseEstimation` missing
 
-Phase estimation has to be done manually. See the sample code in this repo.
+Replaced with `ApplyQPE(applyPowerOfU : (Int, Qubit[]) => Unit is Adj + Ctl, targetState : Qubit[], phase : Qubit[])`
 
 ### `QFTLE` and `QFT` missing
 
