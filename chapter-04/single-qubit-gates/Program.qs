@@ -47,9 +47,7 @@ operation Sample(iterations : Int, op : (Unit => Result)) : Unit {
 operation MeasureI() : Result {
     use qubit = Qubit();
     I(qubit);
-    let result = MResetZ(qubit);
-    Reset(qubit);
-    return result;
+    return MResetZ(qubit);
 }
 
 operation MeasureX() : Result {

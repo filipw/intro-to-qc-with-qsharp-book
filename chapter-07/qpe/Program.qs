@@ -1,58 +1,54 @@
 ﻿import Std.Diagnostics.*;
 import Std.Arrays.*;
 import Std.Convert.*;
+import Std.Canon.*;
 
 operation Main() : Unit {
-    use eigenstate = Qubit();
-
-    TestPhaseEstimation(
-        PrepareOracle(Z),
-        PrepareEigenState(eigenstate),
-        0.5
-    );
-    TestPhaseEstimation(
-        PrepareOracle(S),
-        PrepareEigenState(eigenstate),
-        0.25
-    );
-    TestPhaseEstimation(
-        PrepareOracle(T),
-        PrepareEigenState(eigenstate),
-        0.125
-    );
+    //
+    // uncomment the one desired to run
+    //
+    // RunManualEstimation();
+    // RunBuiltinEstimation();
 }
 
-operation TestPhaseEstimation(oracle : (Int, Qubit[]) => Unit is Adj + Ctl, eigenstate : Qubit, expectedPhase : Double) : Unit {
-    let manualPhase = ManualEstimation(eigenstate, oracle, 3);
-    Message($"Expected: {expectedPhase}");
+operation RunManualEstimation() : Unit {
+    use eigenstate = Qubit();
+    TestPhaseEstimation(ManualEstimation, eigenstate, PrepareOracle(Z), 0.5);
+    TestPhaseEstimation(ManualEstimation, eigenstate, PrepareOracle(S), 0.25);
+    TestPhaseEstimation(ManualEstimation, eigenstate, PrepareOracle(T), 0.125);
+}
 
-    // note: there is no built in phase estimation at the moment in the new QDK 1.x
-    //let libPhase = BuiltinEstimation(eigenstate, oracle, 3);
-    //Message($"Library: {libPhase}");
-    Message($"Manual: {manualPhase}");
-    Message("");
+operation RunBuiltinEstimation() : Unit {
+    use eigenstate = Qubit();
+    TestPhaseEstimation(BuiltinEstimation, eigenstate, PrepareOracle(Z), 0.5);
+    TestPhaseEstimation(BuiltinEstimation, eigenstate, PrepareOracle(S), 0.25);
+    TestPhaseEstimation(BuiltinEstimation, eigenstate, PrepareOracle(T), 0.125);
+}
+
+operation TestPhaseEstimation(estimator : (Qubit, (Int, Qubit[]) => Unit is Adj + Ctl, Int) => Double, eigenstate : Qubit, oracle : (Int, Qubit[]) => Unit is Adj + Ctl, expectedPhase : Double) : Unit {
+    PrepareEigenState(eigenstate);
+    let phase = estimator(eigenstate, oracle, 3);
+    Message($"Expected: {expectedPhase}, estimated: {phase}");
     Reset(eigenstate);
 }
 
-// note: there is no built in phase estimation at the moment in the new QDK 1.x
-// operation BuiltinEstimation(eigenstate : Qubit, oracle : ((Int, Qubit[]) => Unit is Adj + Ctl), precision : Int) : Double {
-//     use qubits = Qubit[precision];
-//     QuantumPhaseEstimation(DiscreteOracle(oracle), [eigenstate], BigEndian(qubits));
-//     let phase = IntAsDouble(MeasureInteger(LittleEndian(Reversed(qubits)))) / IntAsDouble(2^precision);
-//     return phase;
-// }
+operation BuiltinEstimation(eigenstate : Qubit, oracle : ((Int, Qubit[]) => Unit is Adj + Ctl), precision : Int) : Double {
+    use phaseRegister = Qubit[precision];
+    ApplyQPE(oracle, [eigenstate], phaseRegister);
+    let phase = IntAsDouble(MeasureInteger(phaseRegister)) / IntAsDouble(2^precision);
+    return phase;
+}
 
 operation ManualEstimation(eigenstate : Qubit, oracle : ((Int, Qubit[]) => Unit is Adj + Ctl), precision : Int) : Double {
     use qubits = Qubit[precision];
-    ApplyToEach(H, qubits);
+    ApplyToEachCA(H, qubits);
 
     for i in 0..precision - 1 {
-        Controlled oracle([qubits[i]], (2^i, [eigenstate]));
+        let power = 2^((precision - i) - 1);
+        Controlled oracle([qubits[i]], (power, [eigenstate]));
     }
 
-    Adjoint QFTLE(qubits);
-    // alternative:
-    //Adjoint ApproximateQFT(Length(qubits), Reversed(qubits));
+    Adjoint ApplyQFT(qubits);
 
     let phase = IntAsDouble(MeasureInteger(qubits)) / IntAsDouble(2^precision);
     return phase;
@@ -68,31 +64,6 @@ function PrepareOracle(op : (Qubit) => Unit is Adj + Ctl) : ((Int, Qubit[]) => U
     return U(op, _, _);
 }
 
-operation PrepareEigenState(eigenstate : Qubit) : Qubit {
+operation PrepareEigenState(eigenstate : Qubit) : Unit {
     X(eigenstate);
-    return eigenstate;
-}
-
-operation QFTLE(qs : Qubit[]) : Unit is Adj + Ctl {
-    // reversal needed since we want to use little endian order
-    ApproximateQFT(Length(qs), Reversed(qs));
-}
-
-// original QDK QFT implmentation for big-endian
-operation ApproximateQFT(a : Int, qs : Qubit[]) : Unit is Adj + Ctl {
-    let nQubits = Length(qs);
-    Fact(nQubits > 0, "`Length(qs)` must be least 1");
-    Fact(a > 0 and a <= nQubits, "`a` must be positive and less than `Length(qs)`");
-
-    for i in 0..nQubits - 1 {
-        for j in 0..i - 1 {
-            if i - j < a {
-                Controlled R1Frac([qs[i]], (1, i - j, (qs)[j]));
-            }
-        }
-
-        H(qs[i]);
-    }
-
-    SwapReverseRegister(qs);
 }

@@ -42,7 +42,7 @@ You can also use the table below to navigate the samples, and switch between the
 |deutsch-jozsa|7|Deutsch-Jozsa algorithm|[link](../../tree/main/chapter-07/deutsch-jozsa)|[link](../../tree/qdk-1.x/chapter-07/deutsch-jozsa)
 |bernstein-vazirani|7|Bernstein-Vazirani algorithm|[link](../../tree/main/chapter-07/bernstein-vazirani)|[link](../../tree/qdk-1.x/chapter-07/bernstein-vazirani)
 |grover|7|Grover algorithm|[link](../../tree/main/chapter-07/grover)|[link](../../tree/qdk-1.x/chapter-07/grover)
-|qft|7|Quantum Fourier Transform example|[link](../../tree/main/chapter-07/qft)|n/a
+|qft|7|Quantum Fourier Transform example|[link](../../tree/main/chapter-07/qft)|[link](../../tree/qdk-1.x/chapter-07/qft)
 |qpe|7|Quantum phase estimation example|[link](../../tree/main/chapter-07/qpe)|[link](../../tree/qdk-1.x/chapter-07/qpe)
 |shor|7|Shor's algorithm|[link](../../tree/main/chapter-07/shor)|[link](../../tree/qdk-1.x/chapter-07/shor)
 
@@ -123,6 +123,10 @@ Can become:
 let allZeroes = All(result -> result == Zero, MeasureEachZ(x));
 ```
 
+### `@EntryPoint()` no longer needed on `Main()`
+
+By convention, an operation named `Main()` is automatically treated as the entry point. The `@EntryPoint()` attribute is only needed when using a different name or when specifying a target profile (e.g. `@EntryPoint(Adaptive_RI)`).
+
 ### Tuple decomposition now supported
 
 Q# 1.x supports direct tuple decomposition, eliminating the need for accessing tuple elements with the `::Item1`, `::Item2`, etc. syntax.
@@ -140,6 +144,30 @@ let (firstItem, secondItem) = SomeFunction();
 ```
 
 ## Chapter 3
+
+### `newtype` replaced by `struct`
+
+User-defined types declared with `newtype` are now declared using `struct`. The constructor syntax, field access and unwrap operator all change accordingly.
+
+```qsharp
+newtype LabeledResult = (
+    Label : String,
+    MeasurementResult : Result
+);
+
+let result = LabeledResult("measurement one", Zero);
+let label = result::Label;
+let (label, measurementResult) = result!;
+```
+
+Becomes:
+
+```qsharp
+struct LabeledResult { Label : String, MeasurementResult : Result }
+
+let result = new LabeledResult { Label = "measurement one", MeasurementResult = Zero };
+let label = result.Label;
+```
 
 ### `@Attribute()` missing
 
@@ -223,52 +251,58 @@ i.e. `IntAsString(number)` -> `$“{number}”`
 
 ## Chapter 7
 
+### `PowD`, `PowI`, `PowL` are obsolete
+
+The `^` operator is now always exponentiation, making these functions unnecessary.
+
+For example: `PowD(2.0, IntAsDouble(power))` becomes `2.0^IntAsDouble(power)`.
+
 ### `CControlledCA` is missing
 
-Can be re-added by hand. Here is the polyfill:
+Can be replaced with a simple conditional. For example:
 
 ```qsharp
-function CControlledCA<'T> (op : ('T => Unit is Ctl + Adj)) : ((Bool, 'T) => Unit is Ctl + Adj) {
-    return ApplyIfCA(_, op, _);
-}
+ApplyToEachCA(
+    CControlledCA(X),
+    Zipped(IntAsBoolArray(initialValue, Length(qubits)), qubits)
+);
+```
 
-operation ApplyIfCA<'T> (bit : Bool, op : ('T => Unit is Ctl + Adj), target : 'T) : Unit is Ctl + Adj {
-    if (bit) {
-        op(target);
+Becomes:
+
+```qsharp
+let bits = IntAsBoolArray(initialValue, Length(qubits));
+for i in 0..Length(qubits)-1 {
+    if bits[i] {
+        X(qubits[i]);
     }
 }
 ```
 
-### `QuantumPhaseEstimation` missing
+### `QuantumPhaseEstimation` replaced by `ApplyQPE`
 
-Phase estimation has to be done manually. See the sample code in this repo.
-
-### `QFTLE` and `QFT` missing
-
-There is now `ApplyQFT` but it behaves differently (no swap) and is little endian by default.
-It’s very easy to polyfill though:
+`QuantumPhaseEstimation` and the `DiscreteOracle` wrapper have been replaced by `ApplyQPE` from `Std.Canon`, which takes an oracle of type `(Int, Qubit[]) => Unit is Adj + Ctl` directly.
 
 ```qsharp
-operation QFTLE(qs : Qubit[]) : Unit is Adj + Ctl {
-    // reversal needed since we want to use little endian order
-    ApproximateQFT(Length(qs), Reversed(qs));
-}
+let oracle = DiscreteOracle(PrepareOracle(a, N, _, _));
+QuantumPhaseEstimation(oracle, target, BigEndian(source));
+```
 
-// original QDK QFT implementation for big-endian
-operation ApproximateQFT (a : Int, qs : Qubit[]) : Unit is Adj + Ctl {
-     let nQubits = Length(qs);
-     Fact(nQubits > 0, "`Length(qs)` must be least 1");
-     Fact(a > 0 and a <= nQubits, "`a` must be positive and less than `Length(qs)`");
-     for i in 0 .. nQubits - 1 {
-         for j in 0 .. i - 1 {
-             if i - j < a {
-                 Controlled R1Frac([qs[i]], (1, i - j, (qs)[j]));
-             }
-         }
-         H(qs[i]);
-     }
-     SwapReverseRegister(qs);
-}
+Becomes:
+
+```qsharp
+import Std.Canon.*;
+ApplyQPE(oracle, target, source);
+```
+
+### `QFTLE` and `QFT` replaced by `ApplyQFT`
+
+`ApplyQFT` from `Std.Canon` applies the QFT rotations to a little-endian register but does **not** include the final qubit reversal. To get the equivalent of the old `QFTLE`, combine it with `SwapReverseRegister`:
+
+```qsharp
+import Std.Canon.*;
+ApplyQFT(qubits);
+SwapReverseRegister(qubits);
 ```
 
 ### `Fraction` type missing
@@ -289,13 +323,3 @@ let (_, period) = ContinuedFractionConvergentI((numerator, denominator), modulus
 let periodAbs = AbsI(period);
 ```
 
-### `DiscreteOracle` type missing
-
-The `DiscreteOracle` type is no longer available in QDK 1.x. Instead, functions and operations that previously used it should be refactored to accept and use controlled operations directly.
-
-```qsharp
-let oracle = DiscreteOracle(PrepareOracle(a, N, _, _));
-QuantumPhaseEstimation(oracle, target, BigEndian(source));
-```
-
-Can be replaced with a direct implementation of phase estimation that takes the appropriate operations as parameters.

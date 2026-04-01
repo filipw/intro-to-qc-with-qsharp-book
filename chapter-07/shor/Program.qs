@@ -6,7 +6,6 @@ import Std.Random.*;
 import Std.Arithmetic.*;
 import Std.Canon.*; 
 
-@EntryPoint()
 operation Main() : Unit {
     // both the number to factor and the coprime are hardcoded for simplicity
     let N = 15; // number to factor

@@ -3,7 +3,6 @@ import Std.Random.*;
 import Std.Logical.*;
 import Std.Math.*;
 
-@EntryPoint()
 operation Main() : Unit {
     let classicalWinRate = RunGame(ClassicalStrategy);
     Message($"Classical win probability: " + DoubleAsStringWithPrecision(classicalWinRate * 100., 2));

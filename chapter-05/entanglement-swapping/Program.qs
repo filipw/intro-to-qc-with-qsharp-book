@@ -7,7 +7,7 @@ operation Main() : Unit {
 
     for i in 1..4096 {
 
-        let (c1, c3) = EnganglementSwapping();
+        let (c1, c3) = EntanglementSwapping();
 
         if (not c1 and not c3) {
             set res w/= 0 <- res[0] + 1;
@@ -33,7 +33,7 @@ operation Main() : Unit {
     Message($"Measurements of qubits 1 and 3 matched: {matchingMeasurement}");
 }
 
-operation EnganglementSwapping() : (Bool, Bool) {
+operation EntanglementSwapping() : (Bool, Bool) {
 
     // Alice
     use (q1, q2) = (Qubit(), Qubit());

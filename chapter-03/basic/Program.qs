@@ -13,13 +13,10 @@ operation AllocateAndMeasure() : Result {
 }
 
 operation Typed() : Unit {
-    let result = LabeledResult("measurement one", Zero);
+    let result = new LabeledResult { Label = "measurement one", MeasurementResult = Zero };
 
-    // either
-    let label = result::Label;
-    let measurementResult = result::MeasurementResult;
-    // or
-    let (label, measurementResult) = result!;
+    let label = result.Label;
+    let measurementResult = result.MeasurementResult;
 }
 
 function Generics() : Unit {
@@ -187,18 +184,9 @@ function Square(number : Int) : Int {
     return number * number;
 }
 
-newtype LabeledResult = (
-    Label : String,
-    MeasurementResult : Result
-);
+struct LabeledResult { Label : String, MeasurementResult : Result }
 
 operation QuantumTransformation(q : Qubit) : Unit is Adj + Ctl {
     // omitted for brevity
 }
 
-// this cannot be ported - there are no more attributes
-// @Attribute()
-// newtype MyAttribute = (Text : String);
-
-// @MyAttribute("Foo")
-// operation MyOperation() : Unit {}
