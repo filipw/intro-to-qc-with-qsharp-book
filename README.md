@@ -42,7 +42,7 @@ You can also use the table below to navigate the samples, and switch between the
 |deutsch-jozsa|7|Deutsch-Jozsa algorithm|[link](../../tree/main/chapter-07/deutsch-jozsa)|[link](../../tree/qdk-1.x/chapter-07/deutsch-jozsa)
 |bernstein-vazirani|7|Bernstein-Vazirani algorithm|[link](../../tree/main/chapter-07/bernstein-vazirani)|[link](../../tree/qdk-1.x/chapter-07/bernstein-vazirani)
 |grover|7|Grover algorithm|[link](../../tree/main/chapter-07/grover)|[link](../../tree/qdk-1.x/chapter-07/grover)
-|qft|7|Quantum Fourier Transform example|[link](../../tree/main/chapter-07/qft)|n/a
+|qft|7|Quantum Fourier Transform example|[link](../../tree/main/chapter-07/qft)|[link](../../tree/qdk-1.x/chapter-07/qft)
 |qpe|7|Quantum phase estimation example|[link](../../tree/main/chapter-07/qpe)|[link](../../tree/qdk-1.x/chapter-07/qpe)
 |shor|7|Shor's algorithm|[link](../../tree/main/chapter-07/shor)|[link](../../tree/qdk-1.x/chapter-07/shor)
 
