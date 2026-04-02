@@ -53,7 +53,7 @@ operation MeasureI() : Result {
 operation MeasureX() : Result {
     use qubit = Qubit();
     X(qubit);
-    let result = MResetX(qubit);
+    let result = MResetZ(qubit);
     return result;
 }
 
