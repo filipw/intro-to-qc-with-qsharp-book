@@ -1,46 +1,20 @@
-﻿namespace Entanglement {
+import Std.Convert.*;
 
-    open Microsoft.Quantum.Preparation;
-    open Microsoft.Quantum.Canon;
-    open Microsoft.Quantum.Intrinsic;
-    open Microsoft.Quantum.Measurement;
-    open Microsoft.Quantum.Convert;
+operation Main() : Unit {
+    let result = BellState(false, false, true, true);
+}
 
-    @EntryPoint()
-    operation Main() : Unit {
-        TestBellState([false, false], [PauliZ, PauliZ]);
-        TestBellState([false, true], [PauliZ, PauliZ]);
-        TestBellState([true, false], [PauliZ, PauliZ]);
-        TestBellState([true, true], [PauliZ, PauliZ]);
-        TestBellState([false, false], [PauliZ, PauliX]);
-    }
+// basisZ0/basisZ1: true = PauliZ, false = PauliX
+operation BellState(init0 : Bool, init1 : Bool, basisZ0 : Bool, basisZ1 : Bool) : Result[] {
+    use (control, target) = (Qubit(), Qubit());
+    ApplyP(init0 ? PauliX | PauliI, control);
+    ApplyP(init1 ? PauliX | PauliI, target);
 
-    operation TestBellState(init : Bool[], bases : Pauli[]) : Unit {
-        mutable res = [0, 0, 0, 0];
+    H(control);
+    CNOT(control, target);
 
-        for run in 1..4096 {
-            use (control, target) = (Qubit(), Qubit());
-            ApplyP(init[0] ? PauliX | PauliI, control);
-            ApplyP(init[1] ? PauliX | PauliI, target);
-
-            H(control);
-            CNOT(control, target);
-            // PrepareEntangledState([control], [target]);
-            
-            let c1 = ResultAsBool(Measure([bases[0]], [control]));
-            let c2 = ResultAsBool(Measure([bases[1]], [target]));
-
-            if (not c1 and not c2) { set res w/= 0 <- res[0]+1; }
-            if (not c1 and c2) { set res w/= 1 <- res[1]+1; }
-            if (c1 and not c2) { set res w/= 2 <- res[2]+1; }
-            if (c1 and c2) { set res w/= 3 <- res[3]+1; }
-        }
-        
-        let initialState = (init[0] ? "1" | "0") + (init[1] ? "1" | "0");
-        Message($"Initial state: |{initialState}>, measurement of control in {bases[0]} and of target in {bases[1]}");
-        Message($"|00>: {res[0]}");
-        Message($"|01>: {res[1]}");
-        Message($"|10>: {res[2]}");
-        Message($"|11>: {res[3]}");
-    }
+    let r0 = Measure([basisZ0 ? PauliZ | PauliX], [control]);
+    let r1 = Measure([basisZ1 ? PauliZ | PauliX], [target]);
+    ResetAll([control, target]);
+    return [r0, r1];
 }

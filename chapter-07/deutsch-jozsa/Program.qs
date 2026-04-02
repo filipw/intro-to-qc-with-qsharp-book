@@ -1,66 +1,43 @@
-﻿namespace DeutschJozsa {
+import Std.Arrays.*;
 
-    open Microsoft.Quantum.Arrays;
-    open Microsoft.Quantum.Canon;
-    open Microsoft.Quantum.Measurement;
-    open Microsoft.Quantum.Logical;
-    open Microsoft.Quantum.Intrinsic;
+operation Main() : Unit {
+    let result = RunDeutschJozsa(1, 0);
+}
 
-    @EntryPoint()
-    operation Main() : Unit {
-        for n in [1, 6] {
-            let constZero = DeutschJozsaAlgorithm(n, ConstantZero);
-            let constOne = DeutschJozsaAlgorithm(n, ConstantOne);
-            let balEq = DeutschJozsaAlgorithm(n, BalancedEqual);
-            let balNotEq = DeutschJozsaAlgorithm(n, BalancedNotEqual);
-            Message($"n={n}");
-            Message($"Constant 0. Result: {Format(constZero)}.");
-            Message($"Constant 1. Result: {Format(constOne)}.");
-            Message($"Balanced. Result: {Format(balEq)}.");
-            Message($"Balanced opposite. Result: {Format(balNotEq)}.");
-        }
+// oracleType: 0=ConstantZero, 1=ConstantOne, 2=BalancedEqual, 3=BalancedNotEqual
+operation RunDeutschJozsa(n : Int, oracleType : Int) : Result[] {
+    use (x, y) = (Qubit[n], Qubit());
+    X(y);
+    ApplyToEach(H, x);
+    H(y);
+
+    if oracleType == 0 { ConstantZero(x, y); }
+    if oracleType == 1 { ConstantOne(x, y); }
+    if oracleType == 2 { BalancedEqual(x, y); }
+    if oracleType == 3 { BalancedNotEqual(x, y); }
+
+    ApplyToEach(H, x);
+
+    let result = MeasureEachZ(x);
+    ResetAll(x + [y]);
+    return result;
+}
+
+operation ConstantZero(x : Qubit[], y : Qubit) : Unit is Adj {}
+
+operation ConstantOne(x : Qubit[], y : Qubit) : Unit is Adj {
+    X(y);
+}
+
+operation BalancedEqual(x : Qubit[], y : Qubit) : Unit is Adj {
+    for qubit in x {
+        CNOT(qubit, y);
     }
+}
 
-    function Format(result : Bool) : String {
-        return result ? "constant" | "balanced";
+operation BalancedNotEqual(x : Qubit[], y : Qubit) : Unit is Adj {
+    for qubit in x {
+        CNOT(qubit, y);
     }
-
-    operation DeutschJozsaAlgorithm(n : Int, oracle : ((Qubit[], Qubit) => Unit)) : Bool {
-        use (x, y) = (Qubit[n], Qubit());
-        X(y);
-        ApplyToEach(H, x);
-        H(y);
-
-        oracle(x, y);
-
-        ApplyToEach(H, x);
-
-        let allZeroes = All(ResultIsZero, MultiM(x));
-        Reset(y);
-        return allZeroes;
-    }
-
-    function ResultIsZero(result : Result) : Bool {
-        return result == Zero;
-    }
-
-    operation ConstantZero(x : Qubit[], y : Qubit) : Unit is Adj {
-    }
-
-    operation ConstantOne(x : Qubit[], y : Qubit) : Unit is Adj  {
-        X(y);
-    }
-
-    operation BalancedEqual(x : Qubit[], y : Qubit) : Unit is Adj  {
-        for qubit in x {
-            CNOT(qubit, y);
-        }
-    }
-
-    operation BalancedNotEqual(x : Qubit[], y : Qubit) : Unit is Adj {
-        for qubit in x {
-            CNOT(qubit, y);
-        }
-        X(y);
-    }
+    X(y);
 }

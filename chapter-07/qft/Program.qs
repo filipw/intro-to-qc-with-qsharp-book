@@ -1,122 +1,126 @@
-﻿namespace QFTSample {
+import Std.Diagnostics.*;
+import Std.Convert.*;
+import Std.Arrays.*;
+import Std.Math.*;
+import Std.Canon.*;
 
-    open Microsoft.Quantum.Diagnostics;
-    open Microsoft.Quantum.Convert;
-    open Microsoft.Quantum.Arithmetic;
-    open Microsoft.Quantum.Canon;
-    open Microsoft.Quantum.Arrays;
-    open Microsoft.Quantum.Logical;
-    open Microsoft.Quantum.Intrinsic;
-    open Microsoft.Quantum.Math;
+operation Main() : Unit {
+    DumpFourQubitQFT_BigEndian_Manual(10);
+}
 
-    @EntryPoint()
-    operation Main() : Unit {
-        //
-        // uncomment the one desired to run
-        //
-        // FourQubitQFT_BigEndian_Manual(10);
-        // QFT_BigEndian_Framework(10);
-        // QFT_BigEndian_Manual(10);
-
-        // FourQubitQFT_LittleEndian_Manual();
-        // QFT_LittleEndian_Framework();
-    }
-
-    operation FourQubitQFT_BigEndian_Manual(initialValue : Int) : Unit {
-        use qubits = Qubit[4];
-        SetValue(initialValue, qubits);
-
-        H(qubits[0]);
-        Controlled S([qubits[1]], qubits[0]);
-        Controlled T([qubits[2]], qubits[0]);
-        Controlled R1([qubits[3]], (PI()/8.0, qubits[0]));
-
-        H(qubits[1]);
-        Controlled S([qubits[2]], qubits[1]);
-        Controlled T([qubits[3]], qubits[1]);
-
-        H(qubits[2]);
-        Controlled S([qubits[3]], qubits[2]);
-
-        H(qubits[3]);
-        SWAP(qubits[2], qubits[1]);
-        SWAP(qubits[3], qubits[0]);
-        DumpMachine();
-        ResetAll(qubits);
-    }
-
-    operation QFT_BigEndian_Manual(initialValue : Int) : Unit {
-        use qubits = Qubit[BitSizeI(initialValue)];
-        let length = Length(qubits);
-        SetValue(initialValue, qubits);
-
-        for i in 0..length-1 {
-            H(qubits[i]);
-            mutable power = 1;
-            for j in i+1..length-1 {
-                Controlled R1([qubits[j]], (PI() / PowD(2.0, IntAsDouble(power)), qubits[i]));
-                set power += 1;
-            }
+operation SetValue(initialValue : Int, qubits : Qubit[]) : Unit is Adj + Ctl {
+    let bits = IntAsBoolArray(initialValue, Length(qubits));
+    for i in 0..Length(qubits)-1 {
+        if bits[i] {
+            X(qubits[i]);
         }
-
-        SwapReverseRegister(qubits);
-
-        DumpRegister((), qubits);
-        ResetAll(qubits);
     }
+}
 
-    operation QFT_BigEndian_Framework(initialValue : Int) : Unit {
-        use qubits = Qubit[BitSizeI(initialValue)];
-        SetValue(initialValue, qubits);
-        
-        let register = BigEndian(qubits);
-        QFT(register);
+// Big-endian: 4-qubit manual
+operation FourQubitQFT_BigEndian_Manual(qubits : Qubit[]) : Unit {
+    H(qubits[0]);
+    Controlled S([qubits[1]], qubits[0]);
+    Controlled T([qubits[2]], qubits[0]);
+    Controlled R1([qubits[3]], (PI()/8.0, qubits[0]));
 
-        DumpRegister((), qubits);
-        ResetAll(qubits);
+    H(qubits[1]);
+    Controlled S([qubits[2]], qubits[1]);
+    Controlled T([qubits[3]], qubits[1]);
+
+    H(qubits[2]);
+    Controlled S([qubits[3]], qubits[2]);
+
+    H(qubits[3]);
+    SWAP(qubits[2], qubits[1]);
+    SWAP(qubits[3], qubits[0]);
+}
+
+// Big-endian: generalized manual
+operation QFT_BigEndian_Manual(qubits : Qubit[]) : Unit {
+    let length = Length(qubits);
+    for i in 0..length-1 {
+        H(qubits[i]);
+        mutable power = 1;
+        for j in i+1..length-1 {
+            Controlled R1([qubits[j]], (PI() / 2.0^IntAsDouble(power), qubits[i]));
+            set power += 1;
+        }
     }
+    SwapReverseRegister(qubits);
+}
 
-    operation SetValue(initialValue : Int, qubits : Qubit[]) : Unit is Adj + Ctl {
-        ApplyToEachCA(
-            CControlledCA(X),
-            Zipped(IntAsBoolArray(initialValue, Length(qubits)^2), qubits)
-        );
-    }
+// Big-endian: framework (ApplyQFT)
+operation QFT_BigEndian_Framework(qubits : Qubit[]) : Unit {
+    // ApplyQFT operates on little-endian, so reverse to treat as big-endian input
+    SwapReverseRegister(qubits);
+    ApplyQFT(qubits);
+    SwapReverseRegister(qubits);
+}
 
-    operation FourQubitQFT_LittleEndian_Manual() : Unit {
-        use qubits = Qubit[4];
-        let register = LittleEndian(qubits);
-        SetValue(10, qubits);
+// Little-endian: 4-qubit manual
+operation FourQubitQFT_LittleEndian_Manual(qubits : Qubit[]) : Unit {
+    H(qubits[3]);
+    Controlled S([qubits[2]], qubits[3]);
+    Controlled T([qubits[1]], qubits[3]);
+    Controlled R1([qubits[0]], (PI()/8.0, qubits[3]));
 
-        H(qubits[3]);
-        Controlled S([qubits[2]], qubits[3]);
-        Controlled T([qubits[1]], qubits[3]);
-        Controlled R1([qubits[0]], (PI()/8.0, qubits[3]));
+    H(qubits[2]);
+    Controlled S([qubits[1]], qubits[2]);
+    Controlled T([qubits[0]], qubits[2]);
 
-        H(qubits[2]);
-        Controlled S([qubits[1]], qubits[2]);
-        Controlled T([qubits[0]], qubits[2]);
+    H(qubits[1]);
+    Controlled S([qubits[0]], qubits[1]);
 
-        H(qubits[1]);
-        Controlled S([qubits[0]], qubits[1]);
+    H(qubits[0]);
+    SWAP(qubits[1], qubits[2]);
+    SWAP(qubits[0], qubits[3]);
+}
 
-        H(qubits[0]);
-        SWAP(qubits[1], qubits[2]);
-        SWAP(qubits[0], qubits[3]);
+// Little-endian: framework (ApplyQFT)
+operation QFT_LittleEndian_Framework(qubits : Qubit[]) : Unit {
+    ApplyQFT(qubits);
+    SwapReverseRegister(qubits);
+}
 
-        DumpMachine();
-        ResetAll(qubits);
-    }
+// Dump wrappers - each allocates, applies QFT variant, dumps, and resets
 
-    operation QFT_LittleEndian_Framework() : Unit {
-        use qubits = Qubit[4];
+operation DumpFourQubitQFT_BigEndian_Manual(value : Int) : Unit {
+    use qs = Qubit[4];
+    SetValue(value, qs);
+    FourQubitQFT_BigEndian_Manual(qs);
+    DumpMachine();
+    ResetAll(qs);
+}
 
-        let register = LittleEndian(qubits);
-        SetValue(10, qubits);
+operation DumpQFT_BigEndian_Manual(value : Int, nQubits : Int) : Unit {
+    use qs = Qubit[nQubits];
+    SetValue(value, qs);
+    QFT_BigEndian_Manual(qs);
+    DumpMachine();
+    ResetAll(qs);
+}
 
-        QFTLE(register);
+operation DumpQFT_BigEndian_Framework(value : Int, nQubits : Int) : Unit {
+    use qs = Qubit[nQubits];
+    SetValue(value, qs);
+    QFT_BigEndian_Framework(qs);
+    DumpMachine();
+    ResetAll(qs);
+}
 
-        DumpMachine();
-        ResetAll(qubits);
-    }
+operation DumpFourQubitQFT_LittleEndian_Manual(value : Int) : Unit {
+    use qs = Qubit[4];
+    SetValue(value, qs);
+    FourQubitQFT_LittleEndian_Manual(qs);
+    DumpMachine();
+    ResetAll(qs);
+}
+
+operation DumpQFT_LittleEndian_Framework(value : Int, nQubits : Int) : Unit {
+    use qs = Qubit[nQubits];
+    SetValue(value, qs);
+    QFT_LittleEndian_Framework(qs);
+    DumpMachine();
+    ResetAll(qs);
 }
