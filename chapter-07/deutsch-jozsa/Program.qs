@@ -5,22 +5,26 @@ operation Main() : Unit {
 }
 
 // oracleType: 0=ConstantZero, 1=ConstantOne, 2=BalancedEqual, 3=BalancedNotEqual
-operation RunDeutschJozsa(n : Int, oracleType : Int) : Result[] {
+operation RunDeutschJozsa(n : Int, oracleType : Int) : Bool {
+    if oracleType == 0 { return DeutschJozsaAlgorithm(n, ConstantZero); }
+    if oracleType == 1 { return DeutschJozsaAlgorithm(n, ConstantOne); }
+    if oracleType == 2 { return DeutschJozsaAlgorithm(n, BalancedEqual); }
+    return DeutschJozsaAlgorithm(n, BalancedNotEqual);
+}
+
+operation DeutschJozsaAlgorithm(n : Int, oracle : ((Qubit[], Qubit) => Unit)) : Bool {
     use (x, y) = (Qubit[n], Qubit());
     X(y);
     ApplyToEach(H, x);
     H(y);
 
-    if oracleType == 0 { ConstantZero(x, y); }
-    if oracleType == 1 { ConstantOne(x, y); }
-    if oracleType == 2 { BalancedEqual(x, y); }
-    if oracleType == 3 { BalancedNotEqual(x, y); }
+    oracle(x, y);
 
     ApplyToEach(H, x);
 
-    let result = MeasureEachZ(x);
+    let allZeroes = All(result -> result == Zero, MeasureEachZ(x));
     ResetAll(x + [y]);
-    return result;
+    return allZeroes;
 }
 
 operation ConstantZero(x : Qubit[], y : Qubit) : Unit is Adj {}

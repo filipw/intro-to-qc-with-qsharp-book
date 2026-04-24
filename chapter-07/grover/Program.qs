@@ -7,19 +7,27 @@ operation Main() : Unit {
 }
 
 operation RunGrover(searchTarget : Int, bitSize : Int) : Int {
-    let r = Floor(PI() / 4.0 * Sqrt(IntAsDouble(2^bitSize)));
-    use qubits = Qubit[bitSize];
+    return Grover(bitSize, PrepareOracle(searchTarget));
+}
+
+operation Grover(n : Int, oracle : (Qubit[]) => Unit is Adj) : Int {
+    let r = Floor(PI() / 4.0 * Sqrt(IntAsDouble(2^n)));
+    use qubits = Qubit[n];
 
     ApplyToEach(H, qubits);
 
     for _ in 1..r {
-        Oracle(searchTarget, qubits);
+        oracle(qubits);
         Diffusion(qubits);
     }
 
     let number = MeasureInteger(qubits);
     ResetAll(qubits);
     return number;
+}
+
+function PrepareOracle(solution : Int) : ((Qubit[]) => Unit is Adj) {
+    return Oracle(solution, _);
 }
 
 operation Oracle(solution : Int, qubits : Qubit[]) : Unit is Adj {
